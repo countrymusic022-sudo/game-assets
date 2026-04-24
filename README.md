@@ -27,6 +27,32 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 
 開啟：`http://localhost:8000`
 
+## 快速上手（實際操作）
+
+1. 先依照上方完成安裝與啟動。
+2. 用瀏覽器打開 `http://localhost:8000`。
+3. 點「上傳音檔」選擇 `wav` 或 `mp3`。
+4. 按「開始辨識」。
+5. 頁面會顯示：
+   - 每段文字對應的開始/結束時間
+   - 可直接檢視的 SRT 內容
+6. 按「下載 SRT」即可下載字幕檔。
+
+### GPU 建議啟動方式（較快）
+
+```bash
+ASR_DEVICE=cuda ASR_COMPUTE_TYPE=float16 uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+### 常見問題
+
+- **Q: 為什麼第一次跑很慢？**  
+  A: `large-v3` 初次會載入大模型，第一次請求通常較久。
+- **Q: 記憶體不夠怎麼辦？**  
+  A: 將模型改成較小版本，例如：`ASR_MODEL=medium`。
+- **Q: `mp3` 讀不到？**  
+  A: 請確認本機已安裝 `ffmpeg`（`pydub` 轉檔會使用它）。
+
 ## 3) 功能說明
 
 ### Web 介面

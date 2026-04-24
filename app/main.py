@@ -4,7 +4,7 @@ import io
 import os
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, Request, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -74,7 +74,7 @@ async def transcribe(request: Request, file: UploadFile = File(...)):
 
 
 @app.post("/download_srt")
-async def download_srt(srt: str = File(...), filename: str = File("output.srt")):
+async def download_srt(srt: str = Form(...), filename: str = Form("output.srt")):
     return PlainTextResponse(
         content=srt,
         media_type="application/x-subrip",
