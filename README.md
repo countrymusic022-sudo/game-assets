@@ -13,11 +13,23 @@
 
 ## 1) 安裝
 
+先切到專案資料夾（**這步沒做就會找不到 `requirements.txt`**）：
+
+```bash
+cd /workspace/game-assets
+pwd
+ls
+```
+
+你應該會看到 `requirements.txt` 出現在 `ls` 結果中，再執行：
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
+
+> 如果你不是把專案放在 `/workspace/game-assets`，請改成你自己的資料夾路徑。
 
 ## 2) 啟動
 
