@@ -1,0 +1,31 @@
+#!fontforge -script
+# Usage:
+#   fontforge -script font_mvp/export_otf_with_fontforge.pe \
+#     font_mvp/GalaxyLeoKing-MVP.svg font_mvp/GalaxyLeoKing-MVP.otf
+
+if ( $argc < 2 )
+  Print("Usage: fontforge -script export_otf_with_fontforge.pe <input.svg> <output.otf>")
+  Quit(1)
+endif
+
+infile = $1
+outfile = $2
+
+Open(infile)
+
+# Normalize em metrics and naming.
+Reencode("unicode")
+ScaleToEm(1000, 860)
+SetOS2Value("WinAscent", 860)
+SetOS2Value("WinDescent", 140)
+SetFontNames("GalaxyLeoKingMVP", "Galaxy Leo King MVP", "Galaxy Leo King MVP Regular", "Regular")
+
+# Auto cleanup for safer export.
+SelectAll()
+RemoveOverlap()
+CorrectDirection()
+RoundToInt()
+
+Generate(outfile)
+Print("Generated OTF: " + outfile)
+Quit(0)
