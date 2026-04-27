@@ -1,0 +1,89 @@
+:root {
+  color-scheme: light;
+  font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: #f6f8fb;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+h1 {
+  margin-bottom: 6px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  margin-top: 16px;
+  box-shadow: 0 6px 20px rgba(32, 62, 114, 0.08);
+}
+
+label,
+button {
+  display: block;
+}
+
+input[type="file"] {
+  margin: 10px 0;
+}
+
+select,
+input[type="number"],
+.search {
+  width: 100%;
+  margin: 8px 0 12px;
+  padding: 8px 10px;
+  border: 1px solid #cfd7ea;
+  border-radius: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  background: #2156f5;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+.secondary {
+  margin-top: 8px;
+  background: #4b5563;
+}
+
+.error {
+  border-left: 4px solid #ef4444;
+}
+
+.stats {
+  border-left: 4px solid #2156f5;
+}
+
+.segments {
+  padding-left: 18px;
+}
+
+.time {
+  font-size: 0.88rem;
+  color: #46608e;
+  margin-bottom: 4px;
+}
+
+.textarea,
+textarea {
+  width: 100%;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}

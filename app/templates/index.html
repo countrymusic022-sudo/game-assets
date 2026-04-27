@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>台灣中文 Audio to Text</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>台灣中文聲音轉文字（SRT）</h1>
+      <p>支援 WAV / MP3，上傳後自動辨識、分段與輸出時間軸字幕（MacWhisper 風格：速度/準確模式、快速匯出、可讀結果）。</p>
+
+      <form action="/transcribe" method="post" enctype="multipart/form-data" class="card">
+        <label for="file">上傳音檔</label>
+        <input id="file" type="file" name="file" accept=".wav,.mp3,audio/wav,audio/mpeg" required />
+        <label for="profile">辨識模式</label>
+        <select id="profile" name="profile">
+          <option value="fast" {% if profile == "fast" %}selected{% endif %}>Fast（速度優先）</option>
+          <option value="balanced" {% if profile == "balanced" %}selected{% endif %}>Balanced（推薦）</option>
+          <option value="accurate" {% if profile == "accurate" %}selected{% endif %}>Accurate（準確優先）</option>
+        </select>
+
+        <label for="max_segment_duration">單段最長秒數（2~8）</label>
+        <input
+          id="max_segment_duration"
+          type="number"
+          name="max_segment_duration"
+          min="2"
+          max="8"
+          step="0.5"
+          value="{{ max_segment_duration }}"
+        />
+        <button type="submit">開始辨識</button>
+      </form>
+
+      {% if error %}
+      <section class="card error">{{ error }}</section>
+      {% endif %}
+
+      {% if segments %}
+      <section class="card stats">
+        <strong>本次設定：</strong>
+        模式 {{ stats.profile }} ｜ 段落數 {{ stats.segment_count }} ｜ 單段上限 {{ "%.1f"|format(stats.max_segment_duration) }}s
+      </section>
+
+      <section class="card">
+        <h2>辨識結果（段落 + 時間軸）</h2>
+        <input id="searchBox" type="text" placeholder="搜尋關鍵字..." class="search" />
+        <ol class="segments">
+          {% for seg in segments %}
+          <li class="seg-item">
+            <div class="time">
+              {{ "%.2f"|format(seg.start) }}s → {{ "%.2f"|format(seg.end) }}s
+              （長度 {{ "%.2f"|format(seg.end - seg.start) }}s，單段上限 8s）
+            </div>
+            <div class="text">{{ seg.text }}</div>
+          </li>
+          {% endfor %}
+        </ol>
+      </section>
+
+      <section class="card">
+        <h2>SRT 輸出</h2>
+        <textarea rows="14" readonly>{{ srt }}</textarea>
+
+        <form action="/download_srt" method="post">
+          <textarea name="srt" hidden>{{ srt }}</textarea>
+          <input type="hidden" name="filename" value="{{ filename }}" />
+          <button type="submit">下載 SRT</button>
+        </form>
+
+        <form action="/download_txt" method="post">
+          <textarea name="txt" hidden>{{ txt }}</textarea>
+          <input type="hidden" name="filename" value="{{ filename.replace('.srt', '.txt') }}" />
+          <button type="submit" class="secondary">下載 TXT</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>JSON（debug / 二次處理）</h2>
+        <textarea rows="12" readonly>{{ json_text }}</textarea>
+      </section>
+      {% endif %}
+    </main>
+    <script>
+      const searchBox = document.getElementById("searchBox");
+      if (searchBox) {
+        searchBox.addEventListener("input", (e) => {
+          const q = e.target.value.trim().toLowerCase();
+          document.querySelectorAll(".seg-item").forEach((item) => {
+            const text = item.innerText.toLowerCase();
+            item.style.display = q && !text.includes(q) ? "none" : "list-item";
+          });
+        });
+      }
+    </script>
+  </body>
+</html>
